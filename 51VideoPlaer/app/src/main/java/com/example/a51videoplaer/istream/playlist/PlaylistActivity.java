@@ -36,6 +36,19 @@ public class PlaylistActivity extends AppCompatActivity {
         loadPlaylist();
     }
 
+    private String extractVideoId(String url) {
+
+        if (url.contains("v=")) {
+            return url.substring(url.indexOf("v=") + 2).split("&")[0];
+        }
+
+        if (url.contains("youtu.be/")) {
+            return url.substring(url.lastIndexOf("/") + 1);
+        }
+
+        return null;
+    }
+
     private void loadPlaylist() {
 
         new Thread(() -> {
@@ -47,13 +60,16 @@ public class PlaylistActivity extends AppCompatActivity {
 
                 PlaylistAdapter adapter = new PlaylistAdapter(list, item -> {
 
-                    // Click video → go back to Home and play it
-                    Intent intent = new Intent(this, HomeActivity.class);
-                    intent.putExtra("userId", userId);
-                    intent.putExtra("videoUrl", item.videoUrl);
+                    String videoId = extractVideoId(item.videoUrl);
 
+                    if (videoId == null) {
+                        Toast.makeText(this, "Invalid video URL", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    Intent intent = new Intent(this, com.example.a51videoplaer.istream.player.YouTubePlayerActivity.class);
+                    intent.putExtra("videoId", videoId);
                     startActivity(intent);
-                    finish();
                 });
 
                 recyclerView.setAdapter(adapter);

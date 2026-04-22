@@ -22,7 +22,6 @@ public class HomeActivity extends AppCompatActivity {
 
     EditText urlInput;
     Button playBtn, addBtn, playlistBtn, logoutBtn;
-    WebView webView;
 
     AppDatabase db;
     int userId;
@@ -37,15 +36,11 @@ public class HomeActivity extends AppCompatActivity {
         addBtn = findViewById(R.id.btnAdd);
         playlistBtn = findViewById(R.id.btnPlaylist);
         logoutBtn = findViewById(R.id.btnLogout);
-        webView = findViewById(R.id.webView);
 
         db = AppDatabase.getInstance(this);
 
         userId = getIntent().getIntExtra("userId", -1);
 
-        WebSettings settings = webView.getSettings();
-        settings.setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient());
 
         // PLAY VIDEO
         playBtn.setOnClickListener(v -> {
